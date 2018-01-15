@@ -9,6 +9,8 @@ import {
   InteractionManager,
 } from 'react-native'
 
+import SwipeableListViewDataSource from 'react-native/Libraries/Experimental/SwipeableRow/SwipeableListViewDataSource';
+
 const HEIGHT = Dimensions.get('window').height
 
 class Row extends React.Component {
@@ -149,7 +151,10 @@ class SortableListView extends React.Component {
     const currentPanValue = { x: 0, y: 0 }
 
     this.state = {
-      ds: new ListView.DataSource({
+      ds: new SwipeableListViewDataSource({
+        getRowData: (data, sectionID, rowID) => data[sectionID][rowID],
+        getSectionHeaderData: (data, sectionID) => data[sectionID],
+        sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
         rowHasChanged: (r1, r2) => {
           if (props.rowHasChanged) return props.rowHasChanged(r1, r2)
           return false
